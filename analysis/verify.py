@@ -1,39 +1,35 @@
-import networkx as nx, random, math
-from sp import *
-from examples import EXAMPLES
+"""LIS 구현 검증: 모든 부분수열을 다 확인하는 완전탐색과 대조한다."""
+import itertools, random
+from lis import lis_dp_trace, lis_patience_trace, lis_dp, lis_patience
 
-for key, ex in EXAMPLES.items():
-    V, E, s = ex["vertices"], ex["edges"], ex["src"]
-    d = dijkstra_trace(V, E, s); b = bellman_ford_trace(V, E, s)
-    G = nx.DiGraph(); G.add_nodes_from(V); G.add_weighted_edges_from(E)
-    print(f"\n== {key}: {ex['title']}")
-    if nx.negative_edge_cycle(G):
-        print("  networkx: NEGATIVE CYCLE")
-        truth = None
-    else:
-        truth = nx.single_source_bellman_ford_path_length(G, s)
-        truth = {v: truth.get(v, INF) for v in V}
-    print("  truth   :", truth)
-    print("  dijkstra:", {k: fmt(x) for k, x in d['dist'].items()}, "checks", d['relax_checks'], "steps", len(d['steps']))
-    print("  bellman :", {k: fmt(x) for k, x in b['dist'].items()}, "checks", b['relax_checks'], "rounds", b['rounds'], "negcycle", b['neg_cycle'], "steps", len(b['steps']))
-    if truth: print("  D ok?", d['dist']==truth, " BF ok?", b['dist']==truth)
+def brute(a):
+    n = len(a)
+    for L in range(n, 0, -1):
+        for idx in itertools.combinations(range(n), L):
+            if all(a[idx[k]] < a[idx[k + 1]] for k in range(L - 1)):
+                return L
+    return 0
 
-# 무작위 교차검증 (양수 그래프: 셋 다 일치, 음수 간선: BF == networkx)
-random.seed(1); bad=0
-for t in range(3000):
-    n = random.randint(2, 8); V=[chr(65+i) for i in range(n)]
-    E=[(u,v,random.randint(1,9)) for u in V for v in V if u!=v and random.random()<0.35]
-    d=dijkstra_trace(V,E,'A')['dist']; b=bellman_ford_trace(V,E,'A')['dist']
-    G=nx.DiGraph(); G.add_nodes_from(V); G.add_weighted_edges_from(E)
-    tr=nx.single_source_dijkstra_path_length(G,'A'); tr={v:tr.get(v,INF) for v in V}
-    if d!=tr or b!=tr: bad+=1
-    E2=[(u,v,w-3) for u,v,w in E]
-    G2=nx.DiGraph(); G2.add_nodes_from(V); G2.add_weighted_edges_from(E2)
-    bt=bellman_ford_trace(V,E2,'A')
-    reach=nx.descendants(G2,'A')|{'A'}
-    negc = any(nx.negative_edge_cycle(G2.subgraph(c).copy()) for c in nx.strongly_connected_components(G2.subgraph(reach)) if len(c)>1)
-    if negc != bt['neg_cycle']: bad+=1
-    elif not negc:
-        tr2=nx.single_source_bellman_ford_path_length(G2,'A'); tr2={v:tr2.get(v,INF) for v in V}
-        if bt['dist']!=tr2: bad+=1
-print("\nrandom cross-check mismatches:", bad)
+def is_valid(a, path, L):
+    # path는 1-based 인덱스, 순서가 증가하고 값도 엄격히 증가해야 함
+    return (len(path) == L and all(path[k] < path[k + 1] for k in range(L - 1))
+            and all(a[path[k] - 1] < a[path[k + 1] - 1] for k in range(L - 1)))
+
+random.seed(11)
+bad = 0; total = 0
+for t in range(20000):
+    n = random.randint(1, 12)
+    a = [random.randint(-5, 12) for _ in range(n)]          # 중복·음수 포함
+    if t % 5 == 0: a = sorted(a)                             # 오름차순
+    if t % 7 == 0: a = sorted(a, reverse=True)               # 내림차순
+    L = brute(a)
+    d = lis_dp_trace(a); p = lis_patience_trace(a)
+    ok = (d["length"] == p["length"] == L == lis_dp(a)[0] == lis_patience(a)[0]
+          and is_valid(a, d["path"], L) and is_valid(a, p["path"], L)
+          and d["comps"] == lis_dp(a)[1] and p["comps"] == lis_patience(a)[1]
+          and d["comps"] == n * (n - 1) // 2)
+    total += 1
+    if not ok:
+        bad += 1
+        if bad < 5: print("BAD", a, L, d["length"], p["length"], d["path"], p["path"])
+print(f"{total} random cases, mismatches: {bad}")

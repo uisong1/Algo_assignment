@@ -37,6 +37,10 @@ def ro(x):    # 으로/로 (ㄹ 받침은 '로')
     return f"{x}" + ("으로" if _final(x) is True else "로")
 
 
+def pp(x, with_b, without_b):   # 조사만 돌려준다: 괄호 뒤에 붙일 때
+    return with_b if _final(x) else without_b
+
+
 def ida(x):   # 이라서/라서
     return f"{x}" + ("이라서" if _final(x) else "라서")
 
@@ -131,7 +135,7 @@ def lis_patience_trace(a):
                 lo = mid + 1
         k = lo
         back[i] = T[k - 1] if k > 0 else None
-        link = (f"놓는 순간 왼쪽 더미 맨 윗장 {A[back[i]]}({_pos(back[i])})를 가리키는 화살표를 남긴다 "
+        link = (f"놓는 순간 왼쪽 더미 맨 윗장 {A[back[i]]}({_pos(back[i])}){pp(A[back[i]], '을', '를')} 가리키는 화살표를 남긴다 "
                 f"({A[back[i]]} < {x} 이므로 {A[back[i]]} 다음에 {iga(x)} 올 수 있다).") if back[i] else \
                "가장 왼쪽 더미라서 가리킬 카드가 없다(수열의 첫 원소 후보)."
         if k == len(piles):
@@ -158,7 +162,7 @@ def lis_patience_trace(a):
     if bad is not None:      # 맨 윗장들이 원래 순서를 어기면 답이 아니다
         x, y = T[bad], T[bad + 1]
         note = (f" 주의: 마지막 맨 윗장들 [{', '.join(str(A[t]) for t in T)}]은 증가하는 것처럼 보이지만 답이 아니다. "
-                f"{A[x]}({_pos(x)})는 {A[y]}({_pos(y)})보다 뒤에 나온 수라서 이 순서로 뽑을 수 없다. "
+                f"{A[x]}({_pos(x)}){pp(A[x], '은', '는')} {A[y]}({_pos(y)})보다 뒤에 나온 수라서 이 순서로 뽑을 수 없다. "
                 f"그래서 맨 윗장이 아니라 화살표를 따라가야 한다.")
     snap("answer", f"더미가 {L}개 → LIS 길이는 {L}. 마지막 더미의 맨 윗장에서 화살표를 거꾸로 따라가면 "
                    f"{', '.join(str(A[p]) for p in path)}.{note}", path=path)

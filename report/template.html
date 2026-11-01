@@ -212,6 +212,12 @@ figure.f figcaption { font-size: 8.8pt; color: var(--ink-2); margin-top: 4px; }
 <p><a href="{{WEB}}">{{WEB}}</a> 에서 두 알고리즘을 나란히 한 단계씩 넘겨 볼 수 있다. DP는 56단계, 페이션스는 33단계이며, 단계마다 "지금 무엇을 했고 왜 그렇게 했는지"를 문장으로 보여주고 의사코드의 현재 줄을 강조한다. 예제 4개(기본, 이미 정렬됨, 거꾸로 정렬됨, 같은 수 포함)와 직접 입력(최대 10개)을 지원한다.</p>
 <figure class="f"><img class="shot" src="img/web_both_step.png" alt="웹 시각화 두 패널">
 <figcaption>그림 1. 웹 시각화. 왼쪽 DP는 칸 5(a[5] = 8)를 채우며 j = 4(5)와 비교하는 중이고, 오른쪽 페이션스는 6을 더미 3의 8 위에 올리고 5를 가리키는 화살표(노랑)를 남긴 순간이다.</figcaption></figure>
+<div class="two">
+<figure class="f" style="margin-top:0"><img class="shot" src="img/web_dp_update.png" alt="웹 DP 갱신 장면">
+<figcaption>그림 1-2. 웹 DP 패널. 칸 9(a[9] = 7)에서 j = 6(6)과 비교해 dp[9]를 3에서 4로 갱신하는 순간. 의사코드 6번째 줄이 강조된다.</figcaption></figure>
+<figure class="f" style="margin-top:0"><img class="shot" src="img/web_pat_answer.png" alt="웹 페이션스 답 장면">
+<figcaption>그림 1-3. 웹 페이션스 패널의 마지막 단계. 분홍 화살표를 따라 3, 5, 6, 7을 복원하고, 맨 윗장 1, 2, 6, 7이 답이 아닌 이유를 설명한다.</figcaption></figure>
+</div>
 
 <h3>5.2 DP: 칸 하나씩 채우기</h3>
 <p>그림마다 칸 i를 채운 직후의 표다. <span style="color:var(--blue);font-weight:600">파란 칸</span>은 지금 채운 i, <span style="color:#a07800;font-weight:600">노란 칸</span>은 이어 붙인 앞 원소 prev[i]이고, 노란 화살표가 "이 원소 뒤에 붙였다"를 뜻한다. 실제로는 칸마다 왼쪽을 전부 비교하며(총 {{DP_COMPS}}번), 웹 시각화에서는 비교 하나하나를 따로 볼 수 있다.</p>

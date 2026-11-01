@@ -282,9 +282,9 @@
     const head = (id, color) => `<marker id="${id}" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9"
       markerUnits="userSpaceOnUse" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="${color}"/></marker>`;
     let out = `<defs>${head("hd", "rgba(255,255,255,.6)")}${head("hdNew", "#f5c518")}${head("hdPath", "#ff8fb5")}</defs>`;
-    const top = (el) => {
+    const top = (el, inset) => {
       const r = el.getBoundingClientRect();
-      return [r.left - base.left + felt.scrollLeft + r.width / 2, r.top - base.top + 2];
+      return [r.left - base.left + felt.scrollLeft + r.width / 2, r.top - base.top + inset];
     };
     s.back.forEach((target, k) => {
       const src = k + 1;
@@ -292,7 +292,7 @@
       const a = felt.querySelector(`.piles .card[data-idx="${src}"]`);
       const b = felt.querySelector(`.piles .card[data-idx="${target}"]`);
       if (!a || !b) return;
-      const [x1, y1] = top(a), [x2, y2] = top(b);
+      const [x1, y1] = top(a, 2), [x2, y2] = top(b, 13);   // 끝은 가리키는 카드 안쪽까지
       const lift = 22;
       const c1x = x1 - 6, c1y = Math.min(y1, y2) - lift, c2x = x2 + 6, c2y = Math.min(y1, y2) - lift;
       const onPath = pathSet.has(src) && pathSet.has(target);

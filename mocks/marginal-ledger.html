@@ -3,11 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>시안 · 각주 원고 (Marginal Ledger)</title>
+<title>시안 · 각주 원고 (Marginal Ledger) · IBM Plex</title>
 <!-- 시안: 정적 화면. 상태 = DP 20/56(i=5, j=4 갱신), 페이션스 20/33(카드 6을 더미 3에) -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <style>
 :root {
   /* palette.mjs --seed 211.1 --chroma balanced --harmony mono (DESIGN.md) */
@@ -26,9 +25,9 @@
   --mark-path: #a8445e; --mark-path-bg: #f8e6eb;
   --felt: #2e4a3e; --felt-deep: #24392f; --card: #fbfaf6;
   /* 글꼴 */
-  --serif: "Noto Serif KR", "Nanum Myeongjo", serif;
-  --sans: "Pretendard Variable", Pretendard, "Apple SD Gothic Neo", sans-serif;
-  --mono: "IBM Plex Mono", ui-monospace, Menlo, "Pretendard Variable", monospace;
+  --display: "IBM Plex Sans KR", "Apple SD Gothic Neo", sans-serif;
+  --sans: "IBM Plex Sans KR", "Apple SD Gothic Neo", sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, Menlo, "IBM Plex Sans KR", monospace;
   /* 1.25 스케일 */
   --t-xs: 12px; --t-s: 13.5px; --t-m: 15px; --t-l: 18.75px; --t-xl: 23.4px; --t-2xl: 29.3px; --t-3xl: 36.6px;
   --ease: cubic-bezier(.2,.7,.2,1);
@@ -42,7 +41,7 @@ body { margin: 0; color: var(--text); font: 400 var(--t-m)/1.65 var(--sans); fon
 /* ── 머리말 ─────────────────────────── */
 .mast { display: grid; grid-template-columns: 1fr 340px; gap: 48px; align-items: end;
         padding: 40px 0 24px; border-bottom: 1px solid var(--text); }
-.mast h1 { font: 700 var(--t-3xl)/1.25 var(--serif); margin: 8px 0 10px; letter-spacing: -.01em; }
+.mast h1 { font: 700 var(--t-3xl)/1.25 var(--display); margin: 8px 0 10px; letter-spacing: -.02em; }
 .mast .lede { margin: 0; color: var(--text-secondary); max-width: 46em; }
 .input .seq { display: flex; gap: 0; margin: 6px 0 10px; border-top: 1px solid var(--border-subtle); border-bottom: 1px solid var(--border-subtle); }
 .input .seq span { flex: 1; text-align: center; font: 500 var(--t-l)/2 var(--sans); }
@@ -68,12 +67,12 @@ kbd { font: 500 11.5px/1 var(--mono); border: 1px solid var(--border); padding: 
 .pane { min-width: 0; }
 .pane + .pane { padding-left: 40px; border-left: 1px solid var(--border-subtle); margin-left: -40px; }
 .pane header { display: grid; grid-template-columns: auto 1fr; column-gap: 14px; align-items: baseline; }
-.pane .numeral { font: 700 var(--t-2xl)/1 var(--serif); color: var(--border-strong); grid-row: span 2; }
-.pane h2 { font: 600 var(--t-xl)/1.25 var(--serif); margin: 0; }
+.pane .numeral { font: 700 var(--t-2xl)/1 var(--display); color: var(--border-strong); grid-row: span 2; }
+.pane h2 { font: 600 var(--t-xl)/1.25 var(--display); margin: 0; }
 .pane .def { margin: 4px 0 0; font-size: var(--t-s); color: var(--text-secondary); }
 .meta { display: flex; flex-wrap: wrap; gap: 8px 20px; align-items: baseline; margin: 18px 0 14px; padding-bottom: 10px; border-bottom: 1px solid var(--border-subtle); font-size: var(--t-s); }
 .meta b { font-weight: 600; } .meta > span { white-space: nowrap; }
-.meta .big { font-family: var(--mono); font-size: var(--t-s); color: var(--text); }
+.meta .big { font-family: var(--sans); font-weight: 600; font-size: var(--t-s); color: var(--text); }
 .meta .step { margin-left: auto; display: flex; gap: 10px; align-items: center; color: var(--text-secondary); }
 .meta .step button { font: 400 16px/1 var(--sans); border: 1px solid var(--border-subtle); background: none; width: 32px; height: 32px; cursor: pointer; color: var(--text); }
 
@@ -105,13 +104,13 @@ kbd { font: 500 11.5px/1 var(--mono); border: 1px solid var(--border); padding: 
 .slot { aspect-ratio: 5/7; border: 1px dashed rgba(232,239,233,.28); border-radius: 3px; position: relative; }
 .slot .ix { position: absolute; top: 3px; left: 5px; font: 400 10px/1 var(--mono); color: rgba(232,239,233,.45); }
 .mini { aspect-ratio: 5/7; background: var(--card); color: var(--text); border-radius: 3px; display: grid; place-items: center; position: relative;
-        font: 700 var(--t-l)/1 var(--serif); padding-top: 8px; box-shadow: 0 1px 2px rgba(20,40,32,.35); }
+        font: 700 var(--t-l)/1 var(--display); padding-top: 8px; box-shadow: 0 1px 2px rgba(20,40,32,.35); }
 .mini .ix { position: absolute; top: 3px; left: 4px; font: 400 9px/1 var(--mono); color: var(--text-secondary); }
 .piles { position: relative; height: 168px; padding: 22px 24px 0; }
 .pile { position: absolute; top: 22px; width: 60px; }
 .card { position: absolute; left: 0; width: 60px; height: 84px; background: var(--card); color: var(--text); border-radius: 3px;
         box-shadow: 0 1px 0 rgba(20,40,32,.25), 0 4px 10px rgba(20,40,32,.28); }
-.card .v { position: absolute; inset: 0; display: grid; place-items: center; font: 700 var(--t-2xl)/1 var(--serif); }
+.card .v { position: absolute; inset: 0; display: grid; place-items: center; font: 700 var(--t-2xl)/1 var(--display); }
 .card .ix { position: absolute; top: 4px; left: 6px; font: 400 10px/1 var(--mono); color: var(--text-secondary); }
 .card.buried .v { place-items: start; padding: 4px 0 0 8px; font-size: var(--t-m); }
 .card.buried .ix { display: none; }

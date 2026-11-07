@@ -2,12 +2,12 @@
 **Date:** 2026-11-08 · **Status:** confirmed
 **Archetype:** Sage (정밀, 엄밀) + Ruler (단정, 고급) · **Register:** calm structure · expressive at: 카드를 더미에 놓는 순간, 마지막 답 복원
 **Grounding:** Edward Tufte 책의 여백 주석(sidenote) + 스위스 철도(SBB) 시간표의 숫자 조판
-**DNA:** Swiss / International + type voice from Editorial Minimalism · **Dominant axis:** composition (여백 주석)
+**DNA:** Swiss / International (글꼴은 사용자 지정: IBM Plex Sans KR) · **Dominant axis:** composition (여백 주석)
 **Composition:** Marginalia (dealer: swiss-international × marginalia, variance 5, seed lis-visualizer|2026-11-08|0, hue 211.1 cyan)
-**Pins:** 사용자 선택: 후보 ①에 후보 ③의 글꼴(명조 제목)을 합성. 카드 테이블의 펠트 초록은 콘텐츠 색으로 유지.
+**Pins:** 사용자 선택: 후보 ① 구성. 글꼴은 명조 대신 IBM Plex Sans KR(후보 비교 E안)로 교체. 카드 테이블의 펠트 초록은 콘텐츠 색으로 유지.
 
 ## Direction
-채점하는 교수님과 같은 반 학생이 두 알고리즘을 한 단계씩 나란히 보며 "무엇을/왜"를 바로 읽게 한다. 학술서의 여백 주석처럼, 본문(두 패널)은 그림만 보여 주고 설명은 오른쪽 여백의 번호 주석이 맡는다. 단정한 격자와 숫자 조판이 정밀함을, 명조 제목이 고급스러움을 담당한다.
+채점하는 교수님과 같은 반 학생이 두 알고리즘을 한 단계씩 나란히 보며 "무엇을/왜"를 바로 읽게 한다. 학술서의 여백 주석처럼, 본문(두 패널)은 그림만 보여 주고 설명은 오른쪽 여백의 번호 주석이 맡는다. 단정한 격자와 숫자 조판, 한 가족의 IBM Plex(본문·코드)가 정밀하고 정돈된 인상을 만든다.
 
 ## Signature move
 지금 단계에서 바뀐 칸(DP의 dp[i], 페이션스의 방금 놓은 카드)에 위첨자 주석 번호(¹, ²)가 붙고, 같은 번호의 주석이 오른쪽 여백에 "무엇을 / 왜"로 적힌다. 번호와 주석은 같은 잉크색(accent-11)이고, 이 색은 주석 연결에만 쓴다.
@@ -18,9 +18,9 @@
 - 그 외 모든 곳은 차분한 구조를 유지한다.
 
 ## Type
-- Display: Noto Serif KR 600/700 (Google Fonts) — 제목, 패널 제목, 카드 숫자
-- Body: Pretendard Variable (jsDelivr CDN) — 본문, 라벨, 표 숫자(font-variant-numeric: tabular-nums)
-- Code: IBM Plex Mono, 한글 주석은 Pretendard로 대체
+- Display: IBM Plex Sans KR 600/700 (Google Fonts) — 제목, 패널 제목, 카드 숫자. 제목 자간 -0.02em
+- Body: IBM Plex Sans KR 400/500 — 본문, 라벨, 표 숫자(font-variant-numeric: tabular-nums)
+- Code: IBM Plex Mono, 한글 주석은 IBM Plex Sans KR로 대체. 복잡도 표기(Θ, O)는 Mono의 Θ가 0처럼 보이므로 Sans로 쓴다
 - Scale: 1.25 from 15px — 12 · 15 · 18.75 · 23.4 · 29.3 · 36.6
 - Leading: body 1.65 / display 1.25 · Weights: 400, 500, 600(굵게는 제목만)
 - 작은 대문자 라벨: 12px, letter-spacing 0.08em

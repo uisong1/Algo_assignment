@@ -7,38 +7,40 @@
 <meta name="description" content="최장 증가 부분수열(LIS)을 DP O(n²)와 페이션스 정렬 O(n log n)으로 나란히 풀어 보는 단계별 시각화">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect x='4' y='2' width='20' height='27' rx='3' fill='%231e5b47'/%3E%3Crect x='9' y='5' width='20' height='25' rx='3' fill='%23fff' stroke='%231b2128' stroke-width='1.5'/%3E%3Ctext x='19' y='23' font-size='14' text-anchor='middle' font-family='serif' font-weight='700' fill='%231b2128'%3E7%3C/text%3E%3C/svg%3E">
 </head>
 <body>
 <a class="skip" href="#stage">시각화로 건너뛰기</a>
 
-<header class="top">
-  <div class="wrap">
-    <p class="course">2026-2학기 알고리즘 과제 / 주제 A: 알고리즘 동작 시각화</p>
-    <h1>카드 게임으로 푸는<br>최장 증가 부분수열</h1>
-    <p class="lede">같은 수열을 두 가지 방법으로 풉니다. 왼쪽은 표를 한 칸씩 채우는 <b>DP</b>(O(n²)), 오른쪽은 카드를 더미에 쌓는 <b>페이션스 정렬</b>(O(n log n))입니다. 한 단계씩 넘기면서 지금 무엇을 했고 왜 그렇게 했는지 확인해 보세요.</p>
-    <p class="def"><b>최장 증가 부분수열(LIS)</b>은 수열에서 순서는 그대로 두고 몇 개를 골라, 뒤로 갈수록 엄격히 커지게 만들 때 가장 긴 것입니다. 예를 들어 10, 3, 11, 5, 8, 6, 1, 2, 7에서는 <span class="ans">3, 5, 6, 7</span>(길이 4)입니다.</p>
+<header class="mast wrap">
+  <div class="mast-text">
+    <p class="kicker">2026-2학기 알고리즘 과제 · 주제 A · 동작 시각화</p>
+    <h1>카드 게임으로 푸는 최장 증가 부분수열</h1>
+    <p class="lede">같은 수열을 두 방법으로 한 단계씩 풉니다. 왼쪽은 표를 채우는 동적계획법, 오른쪽은 카드를 쌓는 페이션스 정렬입니다. 단계마다 무엇을 했고 왜 그런지는 오른쪽 여백의 번호 주석에 적었습니다.</p>
+    <p class="def"><b>최장 증가 부분수열(LIS)</b>은 수열에서 순서는 그대로 두고 몇 개를 골라 뒤로 갈수록 엄격히 커지게 만들 때 가장 긴 것입니다. 10, 3, 11, 5, 8, 6, 1, 2, 7에서는 3, 5, 6, 7(길이 4)입니다.</p>
   </div>
+  <section class="input" aria-label="입력 수열">
+    <p class="kicker" id="seqLabel">입력 수열</p>
+    <div class="seq" id="seqView" aria-live="polite"></div>
+    <div class="presets" role="group" aria-label="예제 수열"><!-- app.js가 채운다 --></div>
+    <p class="preset-note" id="presetNote"></p>
+    <details class="custom-wrap" id="customWrap">
+      <summary>직접 입력</summary>
+      <form class="custom" id="customForm">
+        <label for="customInput">정수, 쉼표로 구분, 최대 10개</label>
+        <div class="custom-row">
+          <input id="customInput" inputmode="numeric" autocomplete="off" placeholder="예: 4, 9, 2, 7, 5, 8">
+          <button type="submit">실행</button>
+        </div>
+        <p class="form-msg" id="formMsg" role="status"></p>
+      </form>
+    </details>
+  </section>
 </header>
 
 <main id="stage" class="wrap">
-  <section class="input" aria-label="입력 수열">
-    <div class="presets" role="group" aria-label="예제 수열">
-      <!-- app.js가 채운다 -->
-    </div>
-    <form class="custom" id="customForm">
-      <label for="customInput">직접 입력 (정수, 쉼표로 구분, 최대 10개)</label>
-      <div class="custom-row">
-        <input id="customInput" inputmode="numeric" autocomplete="off" placeholder="예: 4, 9, 2, 7, 5, 8">
-        <button type="submit">이 수열로 실행</button>
-      </div>
-      <p class="form-msg" id="formMsg" role="status"></p>
-    </form>
-    <p class="preset-note" id="presetNote"></p>
-  </section>
-
   <section class="controls" aria-label="재생 컨트롤">
     <button id="btnReset" title="처음으로 (Home)">처음으로</button>
     <button id="btnPrev" title="이전 단계 (←)">이전</button>
@@ -52,16 +54,17 @@
       </select>
     </label>
     <button id="btnEnd" title="끝으로 (End)">끝으로</button>
-    <span class="hint">← → 키로도 넘길 수 있어요. 두 패널은 각자의 속도로 진행되고, 패널 안 버튼으로 한쪽만 넘길 수도 있어요.</span>
+    <span class="hint"><kbd>←</kbd> <kbd>→</kbd> 한 단계 · <kbd>Space</kbd> 재생 · <kbd>Home</kbd> <kbd>End</kbd> · 패널 안 ‹ › 로 한쪽만 넘길 수 있어요</span>
   </section>
 
-  <div class="panes">
+  <div class="sheet">
     <section class="pane dp" aria-labelledby="dpTitle">
       <header class="pane-head">
-        <h2 id="dpTitle">DP: 표 채우기</h2>
+        <span class="numeral" aria-hidden="true">I</span>
+        <h2 id="dpTitle">동적계획법 — 표 채우기</h2>
         <p class="pane-sub">dp[i] = a[i]로 끝나는 가장 긴 증가 부분수열의 길이</p>
         <div class="pane-meta">
-          <span class="badge">O(n²)</span>
+          <span class="badge">Θ(n²)</span>
           <span id="dpCount" class="count"></span>
           <span class="mini">
             <button class="ghost" data-pane="dp" data-dir="-1" aria-label="DP 이전 단계">‹</button>
@@ -71,14 +74,14 @@
         </div>
       </header>
       <div class="dp-board" id="dpBoard"></div>
-      <div class="msg" id="dpMsg" aria-live="polite"></div>
       <pre class="code" id="dpCode" aria-label="DP 의사코드"></pre>
     </section>
 
     <section class="pane pat" aria-labelledby="patTitle">
       <header class="pane-head">
-        <h2 id="patTitle">페이션스 정렬: 카드 더미 쌓기</h2>
-        <p class="pane-sub">더미 개수 = LIS 길이. 맨 윗장이 이 카드 이상인 가장 왼쪽 더미에 올린다</p>
+        <span class="numeral" aria-hidden="true">II</span>
+        <h2 id="patTitle">페이션스 정렬 — 카드 쌓기</h2>
+        <p class="pane-sub">맨 윗장이 이 카드 이상인 가장 왼쪽 더미에 올린다. 더미 개수가 답이다</p>
         <div class="pane-meta">
           <span class="badge">O(n log n)</span>
           <span id="patCount" class="count"></span>
@@ -96,9 +99,26 @@
           <div class="piles" id="piles"></div>
         </div>
       </div>
-      <div class="msg" id="patMsg" aria-live="polite"></div>
       <pre class="code" id="patCode" aria-label="페이션스 정렬 의사코드"></pre>
     </section>
+
+    <aside class="notes" aria-label="단계 설명">
+      <div class="legend">
+        <p class="kicker">표시</p>
+        <span><i class="sw i"></i>지금 다루는 칸 · 방금 놓은 카드</span>
+        <span><i class="sw j"></i>비교 중인 칸 j · 이분검색 중인 더미</span>
+        <span><i class="sw p"></i>정답 경로 (마지막 단계)</span>
+      </div>
+      <article class="note" aria-live="polite">
+        <span class="num">1</span>
+        <div><h3 id="dpKind"></h3><p class="ctx" id="dpCtx"></p><p class="body" id="dpMsg"></p></div>
+      </article>
+      <article class="note" aria-live="polite">
+        <span class="num">2</span>
+        <div><h3 id="patKind"></h3><p class="ctx" id="patCtx"></p><p class="body" id="patMsg"></p></div>
+      </article>
+      <p class="aside-foot">두 패널은 같은 수열을 읽습니다. 둘 다 끝까지 가면 아래에 결과 비교표가 나옵니다.</p>
+    </aside>
   </div>
 
   <section class="result" id="result" aria-live="polite" hidden>
@@ -107,7 +127,7 @@
   </section>
 
   <section class="about" aria-labelledby="aboutTitle">
-    <h2 id="aboutTitle">왜 이렇게 되는가</h2>
+    <h2 id="aboutTitle"><span class="numeral" aria-hidden="true">III</span>왜 이렇게 되는가</h2>
     <div class="about-grid">
       <article>
         <h3>복잡도 비교</h3>

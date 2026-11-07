@@ -55,7 +55,9 @@
     state.pat = lisPatienceTrace(state.a);
     state.di = 0; state.pi = 0; state.preset = presetKey;
     document.querySelectorAll(".presets button").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.key === presetKey)));
-    $("presetNote").textContent = `수열: ${state.a.join(", ")} (${state.a.length}개). ` + (presetKey ? PRESETS[presetKey].note : "직접 입력한 수열이에요.");
+    $("seqLabel").textContent = `입력 수열 · ${state.a.length}개`;
+    $("seqView").innerHTML = state.a.map((v) => `<span>${v}</span>`).join("");
+    $("presetNote").textContent = presetKey ? PRESETS[presetKey].note : "직접 입력한 수열이에요.";
     $("customInput").value = presetKey ? "" : state.a.join(", ");
     $("formMsg").textContent = "";
     try { history.replaceState(null, "", "#a=" + state.a.join(",")); } catch (e) { /* 파일로 열었을 때 */ }
@@ -151,10 +153,14 @@
   }
   const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 
-  function renderMsg(el, s) {
-    el.className = "msg k-" + s.kind;
-    el.innerHTML = `<span class="kind">${KIND_LABEL[s.kind] || ""}</span>${esc(s.msg)}`;
+  // 여백 주석: 번호 · 단계 이름 · 위치 · 설명
+  function renderNote(pre, s, ctx) {
+    $(pre + "Kind").textContent = KIND_LABEL[s.kind] || "";
+    $(pre + "Ctx").textContent = ctx;
+    $(pre + "Msg").textContent = s.msg;
+    $(pre + "Msg").closest(".note").className = "note k-" + s.kind;
   }
+  const FN = (n) => `<span class="fn" aria-hidden="true">${n}</span>`;
 
   function renderDp(s) {
     const n = state.a.length;
@@ -178,7 +184,8 @@
     h += `</tr><tr class="r-dp"><th>dp[i]</th>`;
     for (let k = 1; k <= n; k++) {
       const v = s.dp[k - 1];
-      h += `<td class="${v == null ? "empty" : col(k)}">${v ?? "·"}</td>`;
+      const mark = s.i === k && v != null && s.kind !== "answer" && s.kind !== "init" ? FN(1) : "";
+      h += `<td class="${v == null ? "empty" : col(k)}">${v ?? "·"}${mark}</td>`;
     }
     h += `</tr><tr class="r-prev"><th>prev[i]</th>`;
     for (let k = 1; k <= n; k++) {
@@ -196,16 +203,17 @@
       cmp = `답: <span class="ans">${s.path.map((p) => state.a[p - 1]).join(", ")}</span> (길이 ${s.path.length})`;
     }
     $("dpBoard").innerHTML = h + `<p class="dp-cmp">${cmp}</p>`;
-    renderMsg($("dpMsg"), s);
+    renderNote("dp", s, s.kind === "answer" ? "I · DP · 답 복원"
+      : s.i ? `I · DP · i = ${s.i}` + (s.j ? `, j = ${s.j}` : "") : "I · DP");
     renderCode($("dpCode"), DP_CODE, DP_LINE[s.kind]);
     $("dpCount").textContent = `비교 ${s.comps}번`;
     $("dpStep").textContent = `${state.di + 1} / ${state.dp.steps.length}`;
   }
 
-  const CARD_GAP = 22, LABEL_H = 0, CARD_H = 64, FOOT = 24;
+  const CARD_GAP = 22, LABEL_H = 0, CARD_H = 70, FOOT = 26;
 
-  function cardEl(idx, extra = "") {
-    return `<div class="card ${extra}" data-idx="${idx}"><small>a[${idx}]</small><b class="v">${state.a[idx - 1]}</b></div>`;
+  function cardEl(idx, extra = "", mark = "") {
+    return `<div class="card ${extra}" data-idx="${idx}"><small>a[${idx}]</small><b class="v">${state.a[idx - 1]}</b>${mark}</div>`;
   }
 
   function renderPat(s, animate) {
@@ -222,9 +230,13 @@
     let d = "";
     for (let k = 1; k <= state.a.length; k++) {
       const cls = placed.has(k) ? "used" : holding === k ? "drawn" : "";
-      d += cardEl(k, cls);
+      d += cardEl(k, cls, holding === k ? FN(2) : "");
     }
     $("deck").innerHTML = d;
+    if (holding) {   // 좁은 화면에서도 지금 뽑은 카드가 보이게 덱을 옆으로 민다
+      const deck = $("deck"), el = deck.querySelector(`.card[data-idx="${holding}"]`);
+      if (el && deck.scrollWidth > deck.clientWidth) deck.scrollLeft = el.offsetLeft - deck.clientWidth / 2;
+    }
 
     // 더미
     const onPath = new Set(s.kind === "answer" ? s.path : []);
@@ -240,8 +252,9 @@
         if (onPath.has(idx)) c.push("on-path");
         else if (idx !== tops[k]) c.push("under");
         if (s.kind === "probe" && s.probe === k && idx === tops[k]) c.push("top-probe");
-        if ((s.kind === "place" || s.kind === "newpile") && idx === s.i) c.push("new");
-        h += `<div class="card ${c.join(" ")}" data-idx="${idx}" style="top:${LABEL_H + depth * CARD_GAP}px"><small>a[${idx}]</small><b class="v">${state.a[idx - 1]}</b></div>`;
+        const fresh = (s.kind === "place" || s.kind === "newpile") && idx === s.i;
+        if (fresh) c.push("new");
+        h += `<div class="card ${c.join(" ")}" data-idx="${idx}" style="top:${LABEL_H + depth * CARD_GAP}px"><small>a[${idx}]</small><b class="v">${state.a[idx - 1]}</b>${fresh ? FN(2) : ""}</div>`;
       });
       h += `</div>`;
     });
@@ -257,14 +270,15 @@
         el.style.transform = `translate(${fromRect.left - to.left}px, ${fromRect.top - to.top}px)`;
         el.style.zIndex = 4;
         requestAnimationFrame(() => requestAnimationFrame(() => {
-          el.style.transition = "transform .45s cubic-bezier(.2,.7,.2,1)";
+          el.style.transition = "transform .32s cubic-bezier(.2,.7,.2,1)";
           el.style.transform = "";
           el.addEventListener("transitionend", () => drawThreads(s), { once: true });
         }));
       }
     }
     drawThreads(s);
-    renderMsg($("patMsg"), s);
+    renderNote("pat", s, s.kind === "answer" ? "II · 페이션스 · 답 복원"
+      : s.i ? `II · 페이션스 · 카드 a[${s.i}] = ${state.a[s.i - 1]}` : "II · 페이션스");
     renderCode($("patCode"), PAT_CODE, PAT_LINE[s.kind]);
     $("patCount").textContent = `비교 ${s.comps}번 · 더미 ${s.piles.length}개`;
     $("patStep").textContent = `${state.pi + 1} / ${state.pat.steps.length}`;
@@ -281,7 +295,8 @@
     const fresh = (s.kind === "place" || s.kind === "newpile") ? s.i : null;
     const head = (id, color) => `<marker id="${id}" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9"
       markerUnits="userSpaceOnUse" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="${color}"/></marker>`;
-    let out = `<defs>${head("hd", "rgba(255,255,255,.6)")}${head("hdNew", "#f5c518")}${head("hdPath", "#ff8fb5")}</defs>`;
+    const C = { base: "rgba(232,239,233,.42)", fresh: "#bde7ef", path: "#f0a6b9" };
+    let out = `<defs>${head("hd", C.base)}${head("hdNew", C.fresh)}${head("hdPath", C.path)}</defs>`;
     const top = (el, inset) => {
       const r = el.getBoundingClientRect();
       return [r.left - base.left + felt.scrollLeft + r.width / 2, r.top - base.top + inset];
@@ -297,8 +312,8 @@
       const c1x = x1 - 6, c1y = Math.min(y1, y2) - lift, c2x = x2 + 6, c2y = Math.min(y1, y2) - lift;
       const onPath = pathSet.has(src) && pathSet.has(target);
       const isNew = src === fresh;
-      const stroke = onPath ? "#ff8fb5" : isNew ? "#f5c518" : "rgba(255,255,255,.45)";
-      const w = onPath || isNew ? 2.4 : 1.3;
+      const stroke = onPath ? C.path : isNew ? C.fresh : C.base;
+      const w = onPath || isNew ? 2 : 1.25;
       const mk = onPath ? "hdPath" : isNew ? "hdNew" : "hd";
       out += `<path d="M${x1},${y1} C${c1x},${c1y} ${c2x},${c2y} ${x2},${y2 - 1}" fill="none" stroke="${stroke}" stroke-width="${w}" marker-end="url(#${mk})"/>`;
     });
@@ -316,7 +331,7 @@
         <tbody>
           <tr><th>LIS 길이</th><td class="dpc">${d.length}</td><td class="patc">${p.length}</td></tr>
           <tr><th>찾은 수열</th><td class="dpc">${d.seq.join(", ")}</td><td class="patc">${p.seq.join(", ")}</td></tr>
-          <tr><th>비교 횟수</th><td class="dpc">${d.comps}번 = n(n−1)/2 = ${n}·${n - 1}/2</td><td class="patc">${p.comps}번 (더미 ${p.length}개에서 이분검색)</td></tr>
+          <tr><th>비교 횟수</th><td class="dpc"><b>${d.comps}</b>번 = n(n−1)/2 = ${n}·${n - 1}/2</td><td class="patc"><b>${p.comps}</b>번 (더미 ${p.length}개에서 이분검색)</td></tr>
           <tr><th>보여준 단계 수</th><td>${d.steps.length}</td><td>${p.steps.length}</td></tr>
         </tbody>
       </table>

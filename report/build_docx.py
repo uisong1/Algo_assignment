@@ -173,7 +173,20 @@ paras = doc.paragraphs
 for i, para in enumerate(paras):
     if para.style.name.startswith("Heading") and para.text.strip().startswith(("1. ", "5. ")):
         if i > 0:
-            para.paragraph_format.page_break_before = True
+            # '앞에서 페이지 나누기' 속성 대신 빈 문단에 페이지 나눔을 넣는다
+            # (속성을 쓰면 Word가 제목 앞에 ▪ 표시를 띄운다)
+            br = para.insert_paragraph_before()
+            br.style = S["Body Text"] if "Body Text" in S else br.style
+            br.paragraph_format.space_after = Pt(0)
+            br.add_run().add_break(WD_BREAK.PAGE)
+
+# Word는 '다음 문단과 함께'·'줄 나눔 방지'·'앞에서 페이지 나누기'가 걸린 문단 앞에
+# 작은 ▪를 띄운다. 인쇄되지는 않지만 거슬리므로 스타일과 문단에서 모두 뺀다.
+KEEP_TAGS = ("w:keepNext", "w:keepLines", "w:pageBreakBefore")
+for el in list(doc.styles.element.iter()) + list(doc.element.body.iter()):
+    for t in KEEP_TAGS:
+        for k in el.findall(qn(t)):
+            el.remove(k)
 
 doc.save(out_docx)
 print("saved", out_docx, "| work dir:", work)

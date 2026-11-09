@@ -1,0 +1,399 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>시안 · Wired 스타일</title>
+<!-- 시안: 정적 화면. 상태 = DP 20/56(i=5, j=4 갱신), 페이션스 20/33(카드 6을 더미 3에) -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root {
+  /* palette.mjs --seed 211.1 --chroma balanced --harmony mono (DESIGN.md) */
+  --neutral-1: #fcfdfd; --neutral-2: #f7f9f9; --neutral-3: #eef1f2; --neutral-4: #e4e9ea;
+  --neutral-5: #d8dfe1; --neutral-6: #cbd4d6; --neutral-7: #bbc6c8; --neutral-8: #a1adb0;
+  --neutral-11: #5d6567; --neutral-12: #2a2f30;
+  --accent-2: #f2fbfd; --accent-3: #e0f5f9; --accent-5: #bde7ef; --accent-8: #67b9c9;
+  --accent-11: #356d77; --accent-12: #163338;
+  --warning-3: #f9f0dd; --warning-9: #dbb155; --warning-11: #76602f;
+  --background: var(--neutral-1); --surface: var(--neutral-2);
+  --border-subtle: var(--neutral-6); --border: var(--neutral-7); --border-strong: var(--neutral-8);
+  --text-secondary: var(--neutral-11); --text: var(--neutral-12);
+  /* 데이터 전용 */
+  --mark-i: var(--accent-11); --mark-i-bg: var(--accent-3);
+  --mark-j: var(--warning-11); --mark-j-bg: var(--warning-3);
+  --mark-path: #a8445e; --mark-path-bg: #f8e6eb;
+  --felt: #2e4a3e; --felt-deep: #24392f; --card: #fbfaf6;
+  /* 글꼴 */
+  --display: "IBM Plex Sans KR", "Apple SD Gothic Neo", sans-serif;
+  --sans: "IBM Plex Sans KR", "Apple SD Gothic Neo", sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, Menlo, "IBM Plex Sans KR", monospace;
+  /* 1.25 스케일 */
+  --t-xs: 12px; --t-s: 13.5px; --t-m: 15px; --t-l: 18.75px; --t-xl: 23.4px; --t-2xl: 29.3px; --t-3xl: 36.6px;
+  --ease: cubic-bezier(.2,.7,.2,1);
+}
+* { box-sizing: border-box; }
+html { background: var(--background); }
+body { margin: 0; color: var(--text); font: 400 var(--t-m)/1.65 var(--sans); font-feature-settings: "tnum"; }
+.wrap { max-width: 1440px; margin: 0 auto; padding: 0 40px; }
+.caps { font-size: var(--t-xs); letter-spacing: .08em; color: var(--text-secondary); font-weight: 500; }
+
+/* ── 머리말 ─────────────────────────── */
+.mast { display: grid; grid-template-columns: 1fr 340px; gap: 48px; align-items: end;
+        padding: 40px 0 24px; border-bottom: 1px solid var(--text); }
+.mast h1 { font: 700 var(--t-3xl)/1.25 var(--display); margin: 8px 0 10px; letter-spacing: -.02em; }
+.mast .lede { margin: 0; color: var(--text-secondary); max-width: 46em; }
+.input .seq { display: flex; gap: 0; margin: 6px 0 10px; border-top: 1px solid var(--border-subtle); border-bottom: 1px solid var(--border-subtle); }
+.input .seq span { flex: 1; text-align: center; font: 500 var(--t-l)/2 var(--sans); }
+.input .seq span + span { border-left: 1px solid var(--border-subtle); }
+.presets { display: flex; flex-wrap: wrap; gap: 4px 14px; font-size: var(--t-s); }
+.presets a { color: var(--text-secondary); text-decoration: none; border-bottom: 1px solid transparent; }
+.presets a[aria-current] { color: var(--text); border-bottom-color: var(--text); }
+
+/* ── 조작 막대 ───────────────────────── */
+.controls { display: flex; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--border-subtle); }
+.btn { font: 500 var(--t-m)/1 var(--sans); padding: 12px 18px; min-height: 44px; border: 1px solid var(--border); background: var(--background); color: var(--text); cursor: pointer; }
+.btn.primary { background: var(--text); color: var(--neutral-1); border-color: var(--text); }
+.btn:focus-visible { outline: 2px solid var(--accent-11); outline-offset: 2px; }
+.seg { display: inline-flex; margin-left: 12px; }
+.seg .btn { padding: 12px 14px; font-size: var(--t-s); }
+.seg .btn + .btn { border-left: 0; }
+.seg .btn[aria-pressed="true"] { background: var(--neutral-3); }
+.controls .hint { margin-left: auto; font-size: var(--t-s); color: var(--text-secondary); }
+kbd { font: 500 11.5px/1 var(--mono); border: 1px solid var(--border); padding: 3px 5px; background: var(--surface); }
+
+/* ── 원고: 두 패널 + 여백 ───────────────── */
+.sheet { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr) 288px; column-gap: 40px; padding: 32px 0 56px; }
+.pane { min-width: 0; }
+.pane + .pane { padding-left: 40px; border-left: 1px solid var(--border-subtle); margin-left: -40px; }
+.pane header { display: grid; grid-template-columns: auto 1fr; column-gap: 14px; align-items: baseline; }
+.pane .numeral { font: 700 var(--t-2xl)/1 var(--display); color: var(--border-strong); grid-row: span 2; }
+.pane h2 { font: 600 var(--t-xl)/1.25 var(--display); margin: 0; }
+.pane .def { margin: 4px 0 0; font-size: var(--t-s); color: var(--text-secondary); }
+.meta { display: flex; flex-wrap: wrap; gap: 8px 20px; align-items: baseline; margin: 18px 0 14px; padding-bottom: 10px; border-bottom: 1px solid var(--border-subtle); font-size: var(--t-s); }
+.meta b { font-weight: 600; } .meta > span { white-space: nowrap; }
+.meta .big { font-family: var(--sans); font-weight: 600; font-size: var(--t-s); color: var(--text); }
+.meta .step { margin-left: auto; display: flex; gap: 10px; align-items: center; color: var(--text-secondary); }
+.meta .step button { font: 400 16px/1 var(--sans); border: 1px solid var(--border-subtle); background: none; width: 32px; height: 32px; cursor: pointer; color: var(--text); }
+
+/* DP 표 */
+.dp { position: relative; padding: 14px 0 6px;
+      background-image: linear-gradient(var(--neutral-3) 1px, transparent 1px), linear-gradient(90deg, var(--neutral-3) 1px, transparent 1px);
+      background-size: 12px 12px; background-position: -1px -1px; }
+.dp table { border-collapse: separate; border-spacing: 4px; margin: 0 auto; }
+.dp th { font: 500 var(--t-xs)/1 var(--mono); color: var(--text-secondary); text-align: right; padding-right: 8px; white-space: nowrap; }
+.dp thead th { text-align: center; padding: 0 0 4px; font-family: var(--sans); }
+.dp thead .ij { display: block; height: 16px; font: 600 var(--t-xs)/16px var(--mono); }
+.dp td { position: relative; width: 44px; height: 40px; text-align: center; background: var(--background); border: 1px solid var(--border);
+         font: 500 var(--t-l)/1 var(--sans); transition: background 120ms var(--ease), border-color 120ms var(--ease); }
+.dp tr.prev td { height: 30px; font-size: var(--t-s); color: var(--text-secondary); border-color: var(--border-subtle); }
+.dp td.empty { border: 1px dashed var(--border-subtle); background: transparent; color: var(--border); }
+.dp td.j { background: var(--mark-j-bg); border-color: var(--mark-j); }
+.dp td.i { background: var(--mark-i-bg); border-color: var(--mark-i); }
+.dp td.i.hot { border-width: 2px; }
+.dp .rel { text-align: center; margin: 10px 0 0; font-size: var(--t-s); }
+.dp .rel .ok { color: var(--mark-i); font-weight: 600; }
+.fn { position: absolute; top: -9px; right: -7px; min-width: 17px; height: 17px; padding: 0 4px; background: var(--mark-i); color: #fff;
+      font: 600 11px/17px var(--sans); text-align: center; }
+.ij .j { color: var(--mark-j); } .ij .i { color: var(--mark-i); }
+
+/* 페이션스: 펠트 테이블 */
+.table { background: var(--felt); color: #e8efe9; }
+.deck { display: grid; grid-template-columns: 64px repeat(9, 1fr); gap: 6px; align-items: center; padding: 14px 16px; background: var(--felt-deep); }
+.deck .lbl { font-size: var(--t-xs); letter-spacing: .06em; color: #b9c9be; }
+.slot { aspect-ratio: 5/7; border: 1px dashed rgba(232,239,233,.28); border-radius: 3px; position: relative; }
+.slot .ix { position: absolute; top: 3px; left: 5px; font: 400 10px/1 var(--mono); color: rgba(232,239,233,.45); }
+.mini { aspect-ratio: 5/7; background: var(--card); color: var(--text); border-radius: 3px; display: grid; place-items: center; position: relative;
+        font: 700 var(--t-l)/1 var(--display); padding-top: 8px; box-shadow: 0 1px 2px rgba(20,40,32,.35); }
+.mini .ix { position: absolute; top: 3px; left: 4px; font: 400 9px/1 var(--mono); color: var(--text-secondary); }
+.piles { position: relative; height: 168px; padding: 22px 24px 0; }
+.pile { position: absolute; top: 22px; width: 60px; }
+.card { position: absolute; left: 0; width: 60px; height: 84px; background: var(--card); color: var(--text); border-radius: 3px;
+        box-shadow: 0 1px 0 rgba(20,40,32,.25), 0 4px 10px rgba(20,40,32,.28); }
+.card .v { position: absolute; inset: 0; display: grid; place-items: center; font: 700 var(--t-2xl)/1 var(--display); }
+.card .ix { position: absolute; top: 4px; left: 6px; font: 400 10px/1 var(--mono); color: var(--text-secondary); }
+.card.buried .v { place-items: start; padding: 4px 0 0 8px; font-size: var(--t-m); }
+.card.buried .ix { display: none; }
+.card.new { outline: 2px solid var(--accent-5); outline-offset: 2px; }
+.card .fn { top: -9px; right: -9px; }
+.pile .cap { position: absolute; top: 120px; width: 60px; text-align: center; font-size: var(--t-xs); color: #b9c9be; }
+.arrows { position: absolute; left: 0; top: 0; overflow: visible; pointer-events: none; }
+
+/* 의사코드 */
+.code { overflow-x: auto; margin: 20px 0 0; padding: 0; list-style: none; font: 400 12.5px/1.95 var(--mono); border-top: 1px solid var(--border-subtle); counter-reset: ln; }
+.code li { display: grid; grid-template-columns: 28px 1fr; counter-increment: ln; border-bottom: 1px solid var(--neutral-3); white-space: pre; overflow: hidden; }
+.code li::before { content: counter(ln); color: var(--border-strong); text-align: right; padding-right: 10px; }
+.code li.on { background: var(--accent-2); }
+.code li.on::before { content: "▸"; color: var(--mark-i); }
+.code em { font-style: normal; color: var(--text-secondary); font-family: var(--sans); font-size: 12px; }
+
+/* 여백 주석 */
+.notes { font-size: var(--t-s); line-height: 1.7; }
+.notes .legend { display: grid; gap: 6px; padding-bottom: 16px; margin-bottom: 20px; border-bottom: 1px solid var(--border-subtle); }
+.sw { display: inline-block; width: 14px; height: 14px; vertical-align: -2px; margin-right: 8px; border: 1px solid; }
+.sw.i { background: var(--mark-i-bg); border-color: var(--mark-i); }
+.sw.j { background: var(--mark-j-bg); border-color: var(--mark-j); }
+.sw.p { background: var(--mark-path-bg); border-color: var(--mark-path); }
+.note { display: grid; grid-template-columns: 26px 1fr; margin-bottom: 26px; }
+.note .num { font: 600 var(--t-s)/1.7 var(--sans); color: var(--mark-i); }
+.note h3 { margin: 0 0 6px; font: 600 var(--t-m)/1.5 var(--sans); }
+.note h3 small { display: block; font-weight: 500; }
+.note p { margin: 0 0 6px; display: grid; grid-template-columns: 48px 1fr; }
+.note .lab { font-weight: 600; color: var(--text-secondary); font-size: var(--t-xs); letter-spacing: .04em; }
+.note .math { font-family: var(--mono); font-size: 12.5px; white-space: nowrap; }
+.notes .kb { color: var(--text-secondary); padding-top: 16px; border-top: 1px solid var(--border-subtle); }
+.notes .kb kbd { margin-right: 2px; }
+
+footer.colophon { border-top: 1px solid var(--text); padding: 14px 0 40px; font-size: var(--t-xs); color: var(--text-secondary); display: flex; gap: 24px; }
+
+@media (max-width: 1180px) {
+  .sheet { grid-template-columns: minmax(0,1fr) minmax(0,1fr); }
+  .notes { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(2, 1fr); column-gap: 40px; margin-top: 32px; padding-top: 24px; border-top: 1px solid var(--border-subtle); }
+  .notes .legend, .notes .kb { grid-column: 1 / -1; }
+}
+@media (max-width: 760px) {
+  .wrap { padding: 0 16px; }
+  .mast { grid-template-columns: 1fr; gap: 16px; }
+  .mast h1 { font-size: var(--t-2xl); }
+  .sheet { grid-template-columns: 1fr; }
+  .pane + .pane { border-left: 0; padding-left: 0; margin-left: 0; margin-top: 40px; }
+  .notes { grid-template-columns: 1fr; }
+  .controls { flex-wrap: wrap; } .controls .hint { display: none; }
+  .dp { overflow-x: auto; }
+  footer.colophon { flex-direction: column; gap: 4px; }
+  .deck { grid-template-columns: repeat(9, 1fr); } .deck .lbl { grid-column: 1 / -1; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition-duration: 0ms !important; animation-duration: 0ms !important; } }
+
+/* ── Wired 스타일 덮어쓰기 (awesome-design-md/wired/DESIGN.md) ── */
+:root {
+  --display: "Noto Serif KR", Georgia, serif;
+  --serifbody: "Noto Serif KR", Georgia, serif;
+  --sans: "Pretendard Variable", "Helvetica Neue", Arial, sans-serif;
+  --background: #ffffff; --surface: #f5f5f5; --neutral-1: #fff; --neutral-3: #f5f5f5;
+  --border-subtle: #e0e0e0; --border: #000; --border-strong: #757575;
+  --text: #000; --text-secondary: #757575;
+  --accent-2: #f5f5f5; --accent-3: #000; --accent-5: #000; --accent-11: #000;
+  --mark-i: #000; --mark-i-bg: #000;
+  --mark-j: #000; --mark-j-bg: #e0e0e0;
+  --mark-path: #057dbc; --mark-path-bg: #e6f2f8;
+  --felt: #f5f5f5; --felt-deep: #ffffff; --card: #ffffff;
+}
+body { font-size: 16px; }
+.caps { font-family: var(--sans); font-size: 12px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: #000; }
+.mast { border-bottom: 0; border-top: 6px solid #000; padding: 28px 0 28px; margin-top: 0; }
+.mast h1 { font-weight: 400; font-size: 56px; line-height: 1.08; letter-spacing: -.02em; margin: 14px 0 18px; }
+.mast .lede { font-family: var(--serifbody); font-size: 18px; line-height: 1.7; color: #1a1a1a; }
+.input .seq { border-top: 2px solid #000; border-bottom: 1px solid #000; }
+.input .seq span { font-family: var(--display); font-weight: 400; font-size: 22px; }
+.input .seq span + span { border-left: 1px solid #e0e0e0; }
+.presets a { font-size: 13px; font-weight: 700; letter-spacing: .06em; color: #757575; }
+.presets a[aria-current] { color: #000; border-bottom: 2px solid #000; }
+.controls { border-top: 1px solid #000; border-bottom: 1px solid #e0e0e0; }
+.btn { font-weight: 700; font-size: 14px; letter-spacing: .3px; border: 1px solid #000; }
+.btn.primary { background: #000; }
+.seg .btn { border-color: #000; }
+.seg .btn[aria-pressed="true"] { background: #000; color: #fff; }
+.pane .numeral { font-family: var(--display); font-weight: 400; font-size: 44px; color: #000; }
+.pane h2 { font-family: var(--display); font-weight: 400; font-size: 28px; letter-spacing: -.01em; }
+.pane .def { font-family: var(--serifbody); font-size: 14px; color: #1a1a1a; font-style: italic; }
+.meta { border-bottom: 1px solid #000; font-family: var(--sans); }
+.meta .big { font-weight: 700; }
+.dp { background-image: none; border-top: 1px solid #e0e0e0; }
+.dp td { border-color: #000; font-family: var(--display); font-weight: 400; font-size: 20px; }
+.dp tr.prev td { font-family: var(--sans); border-color: #e0e0e0; }
+.dp td.empty { border-color: #e0e0e0; }
+.dp td.i { background: #000; color: #fff; border-color: #000; }
+.dp td.j { background: #e0e0e0; border: 1px dashed #000; }
+.ij .j { color: #757575; }
+.dp .rel { font-family: var(--serifbody); font-style: italic; }
+.dp .rel .ok { color: #000; font-style: normal; text-decoration: underline; text-underline-offset: 3px; }
+.fn { background: #fff; color: #000; border: 1px solid #000; font-family: var(--sans); font-weight: 700; }
+.dp td.i .fn { background: #fff; color: #000; }
+.table { color: #000; border-top: 2px solid #000; border-bottom: 1px solid #000; }
+.deck { border-bottom: 1px solid #e0e0e0; }
+.deck .lbl, .pile .cap { color: #757575; font-weight: 700; letter-spacing: .06em; font-size: 11px; }
+.slot { border-color: #c4c4c4; border-radius: 0; }
+.slot .ix { color: #a0a0a0; }
+.card, .mini { border-radius: 0; box-shadow: none; border: 1px solid #000; }
+.card .v, .mini { font-family: var(--display); font-weight: 400; }
+.card.new { outline: 2px solid #000; outline-offset: 3px; }
+.card.buried { background: #fff; }
+.code { border-top: 1px solid #000; }
+.code li.on { background: #f5f5f5; }
+.code li.on::before { color: #000; }
+.notes .legend { border-bottom: 1px solid #000; }
+.sw.i { background: #000; border-color: #000; }
+.sw.j { background: #e0e0e0; border-style: dashed; border-color: #000; }
+.note { border-top: 2px solid #000; padding-top: 14px; }
+.note .num { font-family: var(--display); font-size: 28px; line-height: 1; color: #000; }
+.note h3 { font-family: var(--display); font-weight: 400; font-size: 20px; }
+.note h3 small.caps { text-transform: none; letter-spacing: .04em; }
+.note p { font-family: var(--serifbody); font-size: 14.5px; }
+.note .lab { font-family: var(--sans); font-weight: 700; letter-spacing: .06em; color: #000; font-size: 11px; }
+footer.colophon { background: #000; color: #fff; border-top: 0; margin: 0 -40px; padding: 28px 40px 40px; letter-spacing: .04em; }
+@media (max-width: 760px) { footer.colophon { margin: 0 -16px; padding-left: 16px; padding-right: 16px; } .mast h1 { font-size: 36px; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="mast">
+  <div>
+    <div class="caps">2026-2학기 알고리즘 · 주제 A · 동작 시각화</div>
+    <h1>카드 게임으로 푸는 최장 증가 부분수열</h1>
+    <p class="lede">같은 문제를 두 방법으로 한 단계씩. 왼쪽은 표를 채우는 동적계획법, 오른쪽은 카드를 쌓는 페이션스 정렬이다. 단계마다 무엇을 했고 왜 그런지는 오른쪽 여백의 번호 주석에 적었다.</p>
+  </div>
+  <div class="input">
+    <div class="caps">입력 수열 · 9개</div>
+    <div class="seq"><span>10</span><span>3</span><span>11</span><span>5</span><span>8</span><span>6</span><span>1</span><span>2</span><span>7</span></div>
+    <nav class="presets" aria-label="예제 수열">
+      <a href="#" aria-current="true">기본</a><a href="#">오름차순</a><a href="#">내림차순</a><a href="#">중복 포함</a><a href="#">직접 입력…</a>
+    </nav>
+  </div>
+</header>
+
+<div class="controls" role="toolbar" aria-label="단계 조작">
+  <button class="btn">처음</button>
+  <button class="btn">이전</button>
+  <button class="btn primary">다음 단계</button>
+  <button class="btn">재생</button>
+  <span class="seg" role="group" aria-label="진행 방식">
+    <button class="btn" aria-pressed="true">같이 진행</button><button class="btn" aria-pressed="false">따로 진행</button>
+  </span>
+  <span class="hint"><kbd>←</kbd> <kbd>→</kbd> 한 단계 · <kbd>Space</kbd> 재생 · <kbd>Home</kbd> <kbd>End</kbd></span>
+</div>
+
+<main class="sheet">
+
+  <!-- I. DP -->
+  <section class="pane" aria-labelledby="h-dp">
+    <header>
+      <span class="numeral">I</span>
+      <h2 id="h-dp">동적계획법 — 표 채우기</h2>
+      <p class="def">dp[i] = a[i]로 끝나는 가장 긴 증가 부분수열의 길이</p>
+    </header>
+    <div class="meta"><span class="big">Θ(n²)</span><span>비교 <b>10</b>번</span>
+      <span class="step"><button aria-label="DP 이전">‹</button><span>20 / 56</span><button aria-label="DP 다음">›</button></span></div>
+
+    <div class="dp">
+      <table>
+        <thead>
+          <tr><th></th><th><span class="ij"></span>1</th><th><span class="ij"></span>2</th><th><span class="ij"></span>3</th><th><span class="ij"><span class="j">j</span></span>4</th><th><span class="ij"><span class="i">i</span></span>5</th><th><span class="ij"></span>6</th><th><span class="ij"></span>7</th><th><span class="ij"></span>8</th><th><span class="ij"></span>9</th></tr>
+        </thead>
+        <tbody>
+          <tr><th>a[i]</th><td>10</td><td>3</td><td>11</td><td class="j">5</td><td class="i">8</td><td>6</td><td>1</td><td>2</td><td>7</td></tr>
+          <tr><th>dp[i]</th><td>1</td><td>1</td><td>2</td><td class="j">2</td><td class="i hot">3<span class="fn">1</span></td><td class="empty"></td><td class="empty"></td><td class="empty"></td><td class="empty"></td></tr>
+          <tr class="prev"><th>prev[i]</th><td>–</td><td>–</td><td>1</td><td>2</td><td>4</td><td class="empty"></td><td class="empty"></td><td class="empty"></td><td class="empty"></td></tr>
+        </tbody>
+      </table>
+      <p class="rel">a[4] = 5 &lt; a[5] = 8 → <span class="ok">이어 붙일 수 있음</span></p>
+    </div>
+
+    <ol class="code" aria-label="DP 의사코드">
+      <li><span>LIS_DP(a[1..n])</span></li>
+      <li><span>  for i = 1 to n</span></li>
+      <li><span>    dp[i] = 1;  prev[i] = 0     <em>// a[i] 혼자서 길이 1</em></span></li>
+      <li><span>    for j = 1 to i − 1</span></li>
+      <li><span>      if a[j] &lt; a[i] and dp[j] + 1 &gt; dp[i]</span></li>
+      <li class="on"><span>        dp[i] = dp[j] + 1;  prev[i] = j</span></li>
+      <li><span>  best = dp가 가장 큰 위치</span></li>
+      <li><span>  return dp[best]          <em>// prev를 거꾸로 따라가 수열 복원</em></span></li>
+    </ol>
+  </section>
+
+  <!-- II. 페이션스 -->
+  <section class="pane" aria-labelledby="h-pt">
+    <header>
+      <span class="numeral">II</span>
+      <h2 id="h-pt">페이션스 정렬 — 카드 쌓기</h2>
+      <p class="def">맨 윗장이 이 카드 이상인 가장 왼쪽 더미에 올린다. 더미 개수가 답이다</p>
+    </header>
+    <div class="meta"><span class="big">O(n log n)</span><span>비교 <b>7</b>번</span><span>더미 <b>3</b>개</span>
+      <span class="step"><button aria-label="페이션스 이전">‹</button><span>20 / 33</span><button aria-label="페이션스 다음">›</button></span></div>
+
+    <div class="table">
+      <div class="deck">
+        <span class="lbl">남은 카드</span>
+        <span class="slot"><span class="ix">a1</span></span><span class="slot"><span class="ix">a2</span></span><span class="slot"><span class="ix">a3</span></span>
+        <span class="slot"><span class="ix">a4</span></span><span class="slot"><span class="ix">a5</span></span><span class="slot"><span class="ix">a6</span></span>
+        <span class="mini"><span class="ix">a7</span>1</span><span class="mini"><span class="ix">a8</span>2</span><span class="mini"><span class="ix">a9</span>7</span>
+      </div>
+      <div class="piles">
+        <div class="pile" style="left:24px">
+          <div class="card buried" style="top:0"><span class="v">10</span></div>
+          <div class="card" style="top:26px"><span class="ix">a[2]</span><span class="v">3</span></div>
+          <span class="cap">더미 1</span>
+        </div>
+        <div class="pile" style="left:112px">
+          <div class="card buried" style="top:0"><span class="v">11</span></div>
+          <div class="card" style="top:26px"><span class="ix">a[4]</span><span class="v">5</span></div>
+          <span class="cap">더미 2</span>
+        </div>
+        <div class="pile" style="left:200px">
+          <div class="card buried" style="top:0"><span class="v">8</span></div>
+          <div class="card new" style="top:26px"><span class="ix">a[6]</span><span class="v">6</span><span class="fn">2</span></div>
+          <span class="cap">더미 3</span>
+        </div>
+        <svg class="arrows" width="520" height="168" aria-hidden="true">
+          <defs>
+            <marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse" markerUnits="userSpaceOnUse"><path d="M0 0 L10 5 L0 10 z" fill="#000"/></marker>
+            <marker id="ahf" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse" markerUnits="userSpaceOnUse"><path d="M0 0 L10 5 L0 10 z" fill="#a0a0a0"/></marker>
+          </defs>
+          <path d="M142 48 C 128 22, 82 22, 66 58" fill="none" stroke="#a0a0a0" stroke-width="1.25" marker-end="url(#ahf)"/>
+          <path d="M230 48 C 216 18, 168 18, 154 58" fill="none" stroke="#000" stroke-width="1.5" marker-end="url(#ah)"/>
+        </svg>
+      </div>
+    </div>
+
+    <ol class="code" aria-label="페이션스 의사코드">
+      <li><span>LIS_Patience(a[1..n])</span></li>
+      <li><span>  piles = 0</span></li>
+      <li><span>  for i = 1 to n                <em>// 카드 a[i]를 뽑는다</em></span></li>
+      <li><span>    k = 이분검색: a[top[k]] ≥ a[i]인 가장 왼쪽 더미</span></li>
+      <li><span>    back[i] = (k &gt; 1) ? top[k − 1] : 0</span></li>
+      <li><span>    if k == piles + 1:  piles = piles + 1</span></li>
+      <li class="on"><span>    top[k] = i                  <em>// 더미 k 위에 올림</em></span></li>
+      <li><span>  return piles</span></li>
+    </ol>
+  </section>
+
+  <!-- 여백 주석 -->
+  <aside class="notes" aria-label="단계 설명">
+    <div class="legend">
+      <div class="caps">표시</div>
+      <span><i class="sw i"></i>지금 다루는 칸 · 방금 놓은 카드</span>
+      <span><i class="sw j"></i>비교 중인 칸 j</span>
+      <span><i class="sw p"></i>정답 경로 (마지막 단계)</span>
+    </div>
+
+    <article class="note" id="n1">
+      <span class="num">1</span>
+      <div>
+        <h3>비교 후 갱신 <small class="caps">I · DP · i = 5, j = 4</small></h3>
+        <p><span class="lab">무엇을</span><span>dp[5]를 2에서 <b>3</b>으로 바꾸고, 앞 원소를 a[4]로 적는다.</span></p>
+        <p><span class="lab">왜</span><span>5 &lt; 8이므로 5로 끝나는 수열(길이 2) 뒤에 8을 붙일 수 있다. <span class="math">2 + 1 = 3 &gt; 2</span></span></p>
+      </div>
+    </article>
+
+    <article class="note" id="n2">
+      <span class="num">2</span>
+      <div>
+        <h3>기존 더미에 올리기 <small class="caps">II · 페이션스 · 카드 a[6] = 6</small></h3>
+        <p><span class="lab">무엇을</span><span>더미 3의 8 위에 6을 올리고, 왼쪽 더미 맨 윗장 5를 가리키는 화살표를 남긴다.</span></p>
+        <p><span class="lab">왜</span><span>맨 윗장은 "길이 3짜리 수열이 끝날 수 있는 가장 작은 값"이다. 8보다 작은 6으로 끝나야 뒤에 더 많은 수를 붙일 수 있다.</span></p>
+      </div>
+    </article>
+
+    <p class="kb">두 패널은 같은 수열을 읽는다. 끝까지 가면 두 결과와 비교 횟수를 나란히 보여 주는 표가 나온다.</p>
+  </aside>
+</main>
+
+<footer class="colophon">
+  <span>2026-2학기 알고리즘 과제</span><span>검증: 완전탐색 대조 20,000개 · 웹–Python 단계 대조 2,004개</span><span>원본 코드 github.com/uisong1/Algo_assignment</span>
+</footer>
+
+</div>
+</body>
+</html>

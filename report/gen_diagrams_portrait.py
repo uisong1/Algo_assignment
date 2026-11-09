@@ -40,3 +40,7 @@ vpage("dp_v2.html", T_DP, dsub, dp_leg, dp_html[6:], 2, 2)
 vpage("pat_v1.html", T_PT, psub, pt_leg, pt_html[:6], 1, 2)
 vpage("pat_v2.html", T_PT, psub, pt_leg, pt_html[6:], 2, 2)
 print("ok")
+
+# 한 장짜리(2열 × 5줄)
+vpage("dp_one.html", T_DP, dsub, dp_leg, dp_html, 1, 1)
+vpage("pat_one.html", T_PT, psub, pt_leg, pt_html, 1, 1)

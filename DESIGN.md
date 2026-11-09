@@ -6,6 +6,11 @@
 **Composition:** Marginalia (dealer: swiss-international × marginalia, variance 5, seed lis-visualizer|2026-11-08|0, hue 211.1 cyan)
 **Pins:** 사용자 선택: 후보 ① 구성. 글꼴은 명조 대신 IBM Plex Sans KR(후보 비교 E안)로 교체. 카드 테이블의 펠트 초록은 콘텐츠 색으로 유지.
 
+> **2026-11-09 변경:** 사이트의 시각 스타일을 Vercel 계열로 교체했다 (awesome-design-md의 `design-md/vercel/DESIGN.md`를 따름).
+> 글꼴 Geist(영문·숫자) + Pretendard(한글), 검정 #171717 주 버튼, 6–8px 모서리, 겹친 얇은 그림자, 검정 카드 테이블,
+> 표시 색: 지금 칸 #0761d1/#d3e5ff · 비교 칸 #ab570a/#ffefcf · 정답 경로 #4c2889/#d8ccf1.
+> 아래의 구성(두 패널 + 여백 번호 주석, 시그니처 각주 표시)은 그대로 유지한다. 구현은 docs/style.css 맨 아래 "Vercel 스타일" 블록.
+
 ## Direction
 채점하는 교수님과 같은 반 학생이 두 알고리즘을 한 단계씩 나란히 보며 "무엇을/왜"를 바로 읽게 한다. 학술서의 여백 주석처럼, 본문(두 패널)은 그림만 보여 주고 설명은 오른쪽 여백의 번호 주석이 맡는다. 단정한 격자와 숫자 조판, 한 가족의 IBM Plex(본문·코드)가 정밀하고 정돈된 인상을 만든다.
 

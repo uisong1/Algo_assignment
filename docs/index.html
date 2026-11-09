@@ -7,7 +7,8 @@
 <meta name="description" content="최장 증가 부분수열(LIS)을 DP O(n²)와 페이션스 정렬 O(n log n)으로 나란히 풀어 보는 단계별 시각화">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <link rel="stylesheet" href="style.css">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect x='4' y='2' width='20' height='27' rx='3' fill='%231e5b47'/%3E%3Crect x='9' y='5' width='20' height='25' rx='3' fill='%23fff' stroke='%231b2128' stroke-width='1.5'/%3E%3Ctext x='19' y='23' font-size='14' text-anchor='middle' font-family='serif' font-weight='700' fill='%231b2128'%3E7%3C/text%3E%3C/svg%3E">
 </head>
@@ -60,7 +61,7 @@
   <div class="sheet">
     <section class="pane dp" aria-labelledby="dpTitle">
       <header class="pane-head">
-        <span class="numeral" aria-hidden="true">I</span>
+        <span class="numeral" aria-hidden="true">01</span>
         <h2 id="dpTitle">동적계획법 — 표 채우기</h2>
         <p class="pane-sub">dp[i] = a[i]로 끝나는 가장 긴 증가 부분수열의 길이</p>
         <div class="pane-meta">
@@ -79,7 +80,7 @@
 
     <section class="pane pat" aria-labelledby="patTitle">
       <header class="pane-head">
-        <span class="numeral" aria-hidden="true">II</span>
+        <span class="numeral" aria-hidden="true">02</span>
         <h2 id="patTitle">페이션스 정렬 — 카드 쌓기</h2>
         <p class="pane-sub">맨 윗장이 이 카드 이상인 가장 왼쪽 더미에 올린다. 더미 개수가 답이다</p>
         <div class="pane-meta">
@@ -127,7 +128,7 @@
   </section>
 
   <section class="about" aria-labelledby="aboutTitle">
-    <h2 id="aboutTitle"><span class="numeral" aria-hidden="true">III</span>왜 이렇게 되는가</h2>
+    <h2 id="aboutTitle"><span class="numeral" aria-hidden="true">03</span>왜 이렇게 되는가</h2>
     <div class="about-grid">
       <article>
         <h3>복잡도 비교</h3>

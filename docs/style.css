@@ -290,3 +290,106 @@ button.ghost {
   * { transition: none !important; animation: none !important; }
 }
 .deck .card .fn { top: -8px; right: -7px; }
+
+/* ════════════════════════════════════════════════════════════════
+   Vercel 스타일 (awesome-design-md/vercel/DESIGN.md를 따름)
+   위의 구조는 그대로 두고 색·글꼴·모양만 덮어쓴다
+   ════════════════════════════════════════════════════════════════ */
+:root {
+  --sans: Geist, "Pretendard Variable", Pretendard, system-ui, sans-serif;
+  --mono: "Geist Mono", ui-monospace, Menlo, "Pretendard Variable", monospace;
+  --background: #ffffff; --surface: #fafafa; --neutral-1: #ffffff; --neutral-2: #fafafa; --neutral-3: #f5f5f5;
+  --border-subtle: #ebebeb; --border: #e5e5e5; --border-strong: #a1a1a1;
+  --text: #171717; --text-secondary: #4d4d4d;
+  --accent-2: #f5f9ff; --accent-3: #d3e5ff; --accent-5: #6aa8ff; --accent-11: #0070f3;
+  --warning-9: #f5a623; --error-11: #c50000;
+  --mark-i: #0761d1; --mark-i-bg: #d3e5ff;
+  --mark-j: #ab570a; --mark-j-bg: #ffefcf;
+  --mark-path: #4c2889; --mark-path-bg: #d8ccf1;
+  --felt: #171717; --felt-deep: #0a0a0a; --felt-ink: #a1a1a1; --card: #ffffff;
+  --r: 6px; --r-lg: 8px;
+  --shadow-sm: 0 1px 2px rgba(0,0,0,.05);
+  --shadow-ring: 0 0 0 1px rgba(0,0,0,.06), 0 1px 2px rgba(0,0,0,.05);
+}
+body { letter-spacing: -.01em; font-variant-numeric: tabular-nums; }
+.kicker { font-family: var(--mono); font-size: 12px; letter-spacing: 0; }
+a { color: #0070f3; }
+
+/* 머리말 */
+.mast { padding: 56px 0 32px; border-bottom: 1px solid var(--border-subtle); }
+h1 { font-weight: 600; font-size: 44px; line-height: 1.1; letter-spacing: -.05em; margin: 14px 0 14px; }
+.lede { color: var(--text-secondary); font-size: 17px; }
+.seq { border: 1px solid var(--border-subtle); border-radius: var(--r); overflow: hidden; box-shadow: var(--shadow-sm); }
+.seq span { font-family: var(--mono); font-weight: 500; }
+.presets button { color: var(--text-secondary); font-size: 14px; }
+.presets button[aria-pressed="true"] { border-bottom-color: transparent; font-weight: 500; }
+.presets button[aria-pressed="true"]::before { content: "● "; font-size: 8px; vertical-align: 2px; }
+.custom input { border-radius: var(--r) 0 0 var(--r); background: #fff; font-family: var(--mono); }
+.custom button { border-radius: 0 var(--r) var(--r) 0; }
+
+/* 버튼 */
+button { border-radius: var(--r); border-color: var(--border-subtle); font-size: 14px; font-weight: 500;
+         box-shadow: var(--shadow-sm); min-height: 40px; padding: 10px 16px; }
+button:hover { border-color: var(--border-strong); background: #fafafa; }
+button.primary { background: #171717; border-color: #171717; color: #fff; }
+button.primary:hover { background: #383838; border-color: #383838; }
+button.ghost { border-radius: var(--r); width: 32px; min-height: 32px; box-shadow: none; }
+.controls { border-bottom-color: var(--border-subtle); }
+.speed select { border-radius: var(--r); height: 40px; border-color: var(--border-subtle); }
+kbd { border-radius: 4px; font-family: var(--mono); }
+
+/* 패널 */
+.sheet { border-bottom-color: var(--border-subtle); }
+.numeral { font-family: var(--mono); font-weight: 400; font-size: 13px; color: var(--border-strong); align-self: center; }
+.pane-head h2, .result h2, .about h2 { font-weight: 600; letter-spacing: -.04em; }
+.pane-meta { border-bottom-color: var(--border-subtle); }
+.badge { font-family: var(--mono); font-weight: 500; }
+.dp-board { background-image: radial-gradient(#e5e5e5 1px, transparent 1px); background-size: 16px 16px; background-position: 0 0;
+            border: 1px solid var(--border-subtle); border-radius: var(--r-lg); padding: 22px 8px 12px; }
+.dp-grid td { border-radius: var(--r); border-color: var(--border-subtle); box-shadow: var(--shadow-sm); }
+.dp-grid td.empty { box-shadow: none; border-color: #e5e5e5; }
+.dp-grid td.is-i, .dp-grid td.is-j, .dp-grid td.on-path { box-shadow: none; }
+.fn { border-radius: 9px; background: #0070f3; }
+
+/* 카드 테이블 */
+.table { border-radius: var(--r-lg); overflow: hidden; }
+.deck::before { font-family: var(--mono); }
+.card { border-radius: var(--r); box-shadow: 0 0 0 1px rgba(255,255,255,.08), 0 2px 4px rgba(0,0,0,.4), 0 8px 16px rgba(0,0,0,.3); }
+.card b.v { font-weight: 600; letter-spacing: -.04em; }
+.card small, .pile-label { font-family: var(--mono); }
+.deck .card.used { border-color: rgba(255,255,255,.18); border-radius: var(--r); }
+.deck .card.drawn, .card.new { outline-color: #0070f3; }
+.card.top-probe { outline-color: #f5a623; }
+.card.on-path { background: var(--mark-path-bg); color: var(--mark-path); outline-color: #b49be6; }
+.pile.probe .pile-label { color: #f5a623; }
+
+/* 의사코드 */
+.code { border: 1px solid var(--border-subtle); border-radius: var(--r-lg); background: #fafafa; padding: 6px 0; }
+.code > span { border-bottom: 0; }
+.code > span.on { background: #d3e5ff; }
+.code .c { font-family: var(--mono); color: #888; font-size: 12px; }
+
+/* 여백 주석 */
+.legend { border-bottom-color: var(--border-subtle); }
+.sw { border-radius: 4px; }
+.note { border: 1px solid var(--border-subtle); border-radius: var(--r-lg); padding: 16px; box-shadow: var(--shadow-sm); min-height: 0; }
+.note .num { font-family: var(--mono); color: #0070f3; }
+.note h3 { font-weight: 600; letter-spacing: -.02em; }
+.note .ctx { font-family: var(--mono); }
+.aside-foot { border-top-color: var(--border-subtle); }
+
+/* 결과·설명 */
+.result, .about { border-bottom-color: var(--border-subtle); }
+.res-table { border-top: 0; border: 1px solid var(--border-subtle); border-radius: var(--r-lg); border-collapse: separate; border-spacing: 0; overflow: hidden; }
+.res-table th, .res-table td { padding: 12px 16px; }
+.res-table thead th { background: #fafafa; font-family: var(--mono); font-size: 12px; }
+.res-table tr:last-child th, .res-table tr:last-child td { border-bottom: 0; }
+.cx { border-top: 1px solid var(--border-subtle); }
+.cx thead th { font-family: var(--mono); }
+.about article { border-left-color: var(--border-subtle); }
+
+/* 바닥글: 검정 띠 */
+.foot { width: 100%; max-width: none; background: #171717; color: #a1a1a1; padding: 28px max(40px, calc((100% - 1440px) / 2)) 48px; font-family: var(--mono); }
+.foot a { color: #ededed; }
+@media (max-width: 960px) { .foot { padding-left: 16px; padding-right: 16px; } }
+@media (max-width: 520px) { h1 { font-size: 32px; } }

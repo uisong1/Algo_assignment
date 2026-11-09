@@ -203,8 +203,8 @@
       cmp = `답: <span class="ans">${s.path.map((p) => state.a[p - 1]).join(", ")}</span> (길이 ${s.path.length})`;
     }
     $("dpBoard").innerHTML = h + `<p class="dp-cmp">${cmp}</p>`;
-    renderNote("dp", s, s.kind === "answer" ? "I · DP · 답 복원"
-      : s.i ? `I · DP · i = ${s.i}` + (s.j ? `, j = ${s.j}` : "") : "I · DP");
+    renderNote("dp", s, s.kind === "answer" ? "01 · DP · 답 복원"
+      : s.i ? `01 · DP · i = ${s.i}` + (s.j ? `, j = ${s.j}` : "") : "01 · DP");
     renderCode($("dpCode"), DP_CODE, DP_LINE[s.kind]);
     $("dpCount").textContent = `비교 ${s.comps}번`;
     $("dpStep").textContent = `${state.di + 1} / ${state.dp.steps.length}`;
@@ -277,8 +277,8 @@
       }
     }
     drawThreads(s);
-    renderNote("pat", s, s.kind === "answer" ? "II · 페이션스 · 답 복원"
-      : s.i ? `II · 페이션스 · 카드 a[${s.i}] = ${state.a[s.i - 1]}` : "II · 페이션스");
+    renderNote("pat", s, s.kind === "answer" ? "02 · 페이션스 · 답 복원"
+      : s.i ? `02 · 페이션스 · 카드 a[${s.i}] = ${state.a[s.i - 1]}` : "02 · 페이션스");
     renderCode($("patCode"), PAT_CODE, PAT_LINE[s.kind]);
     $("patCount").textContent = `비교 ${s.comps}번 · 더미 ${s.piles.length}개`;
     $("patStep").textContent = `${state.pi + 1} / ${state.pat.steps.length}`;
@@ -295,7 +295,7 @@
     const fresh = (s.kind === "place" || s.kind === "newpile") ? s.i : null;
     const head = (id, color) => `<marker id="${id}" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9"
       markerUnits="userSpaceOnUse" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="${color}"/></marker>`;
-    const C = { base: "rgba(232,239,233,.42)", fresh: "#bde7ef", path: "#f0a6b9" };
+    const C = { base: "rgba(255,255,255,.32)", fresh: "#6aa8ff", path: "#b49be6" };
     let out = `<defs>${head("hd", C.base)}${head("hdNew", C.fresh)}${head("hdPath", C.path)}</defs>`;
     const top = (el, inset) => {
       const r = el.getBoundingClientRect();
